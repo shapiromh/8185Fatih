@@ -97,16 +97,16 @@ gdiff2 = gprime(1.5)-gdest2;
 
 % Parameters and Grid
 
-A = 1;
+A = 2;
 beta = .9;
-alpha = .4; 
-delta = .1; 
+alpha = .7; 
+delta = .8; 
 kss = ((1/(beta*alpha*A)-(1-delta)/(alpha*A)))^(1/(alpha-1)); % steady state capital
 kmin = .1*kss; % minimum capital level on grid
 kmax = 1.5*kss; % largest capital level on grid
 kgrid = [kmin:.01:kmax]'; % grid, adjust increment
 gridsize = size(kgrid,1);
-iter = 100; % iterations allowed by the program
+iter = 1000; % iterations allowed by the program
 crit = 10^(-6); % critical value for convergence
 
 optcap = zeros(length(kgrid),iter); % space for optimal capital policy for every cap level at each iter
@@ -118,6 +118,7 @@ optval = zeros(length(kgrid),iter); % same for value function
 PPF = kron(ones(1,gridsize),(1-delta)*kgrid+A*kgrid.^alpha); % PPF using kgrid element capital
 k1 = kgrid'; % choices for next state capital
 cons = PPF - kron(ones(gridsize,1),k1); %(a,b) in this matrix is consumption with a capital level and b capital choice
+cons = max(cons,eps); % 0 is lower bound on consumption
 util = log(cons); % utility for all capital and capital choice pairs
 V = util+beta*kron(ones(gridsize,1),optval(:,1)'); % first iteration of the value fn
 
