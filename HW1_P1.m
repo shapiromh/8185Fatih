@@ -1,5 +1,5 @@
 % Code: Written by Matt Shapiro
-% Date: September 23rd, 2012
+% Date: November 9, 2012
 % Macro 8185 - Prof. Fatih Guvenen
 % Problem Set 1
 
@@ -48,7 +48,7 @@ phim2=ones(1,21);
 % Recursion Method
 
 phim1(1)=1;
-phim2(2)=.61803398;
+phim1(2)=.61803398;
 
 for j=3:21
     phim1(j)=phim1(j-2)-phim1(j-1);
@@ -97,10 +97,10 @@ gdiff2 = gprime(1.5)-gdest2;
 
 % Parameters and Grid
 
-A = 2;
-beta = .8;
-alpha = .7; 
-delta = .8; 
+A = 1;
+beta = .9;
+alpha = .4; 
+delta = .1; 
 kss = ((1/(beta*alpha*A)-(1-delta)/(alpha*A)))^(1/(alpha-1)); % steady state capital
 kmin = .1*kss; % minimum capital level on grid
 kmax = 1.5*kss; % largest capital level on grid
