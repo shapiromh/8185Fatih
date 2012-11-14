@@ -4,16 +4,17 @@
 % Problem Set 1
 
 clear, clc
+format long
 
 %% Q1 First Method
 
 % Quadratic Formula
 
-quad1 = @(a,b,c) (-b+sqrt(b^2-4*a*c))/2*a;
-quad2 = @(a,b,c) (-b-sqrt(b^2-4*a*c))/2*a;
+quad1 = @(a,b,c) (-b+sqrt(b^2-4*a*c))/(2*a);
+quad2 = @(a,b,c) (-b-sqrt(b^2-4*a*c))/(2*a);
 
 % Parameters
-n= -8:1:-1;
+n= -1:-1:-8;
 
 a = 1;
 b = 100000;
@@ -21,23 +22,29 @@ c = ones(size(n));
 for j=1:length(n)
     c(j)=10^(n(j));
 end
+
 quadm1 = ones(size(n));
+quadmin1 = ones(size(n));
 
 % Formulas
 
 quadm1(:) = max(quad1(a,b,c(:)),quad2(a,b,c(:)));
+quadmin1(:) = min(quad1(a,b,c(:)),quad2(a,b,c(:)));
 
 %% Q1 Second Method
 
 quadm2 = ones(size(n));
+quadmin2 = ones(size(n));
 
-q = @(a,b,c) (1/2)*(b+sign(b)*sqrt(b^2-4*a*c));
+q = @(a,b,c) -(1/2)*(b+sign(b)*sqrt(b^2-4*a*c));
 q1 = @(q,a) q/a;
 q2 = @(c,q) c./q;
 
 quadm2(:)= max(q1(q(a,b,c(:)),a),q2(c(:),q(a,b,c(:))));
+quadmin2(:) = min(q1(q(a,b,c(:)),a),q2(c(:),q(a,b,c(:))));
 
 quaddiff = quadm1 - quadm2; % difference in evaluations of two methods
+
 
 %% Q2 Truncation Errors
 
@@ -100,11 +107,11 @@ gdiff2 = gprime(1.5)-gdest2;
 A = 2;
 beta = .9;
 alpha = .7; 
-delta = .8; 
+delta = 1; 
 kss = ((1/(beta*alpha*A)-(1-delta)/(alpha*A)))^(1/(alpha-1)); % steady state capital
 kmin = .1*kss; % minimum capital level on grid
 kmax = 1.5*kss; % largest capital level on grid
-kgrid = [kmin:.01:kmax]'; % grid, adjust increment
+kgrid = [kmin:.05:kmax]'; % grid, adjust increment
 gridsize = size(kgrid,1);
 iter = 1000; % iterations allowed by the program
 crit = 10^(-6); % critical value for convergence
@@ -133,5 +140,17 @@ for j=2:iter
     V= util + beta*kron(ones(gridsize,1),optval(:,j)'); % updating value function
 end
 
-optcap(:,conind)
-optval(:,conind)
+optcap(:,conind);
+optval(:,conind);
+
+trucapval=ones(length(kgrid),1);
+trucapval=beta*alpha*A*(kgrid).^(alpha);% policy function when del=1 from analytical solution
+
+a0=(1/(1-beta))*log(A-alpha*beta*A)+(beta*alpha/((1-alpha*beta)*(1-beta)))*log(A*beta*alpha);
+a1=alpha/(1-alpha*beta);
+trueval= a0+a1*log(kgrid); % true value function when del=1
+
+caperror = abs(trucapval-optcap(:,conind));
+valerror = abs(trueval-optval(:,conind));
+meancap = mean(caperror)
+meanval = mean(valerror)
