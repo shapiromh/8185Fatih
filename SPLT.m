@@ -16,7 +16,7 @@ end
 klo =1;
 khi =m;
 while (khi-klo)>1
-    k = (khi+klo)/2;
+    k = floor((khi+klo)/2);
     if x(k)>c 
         khi=k;
     else
