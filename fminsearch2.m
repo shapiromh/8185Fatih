@@ -238,7 +238,7 @@ end
 
 % Continue setting up the initial simplex.
 % Following improvement suggested by L.Pfeffer at Stanford
-usual_delta = 0.1;             % 5 percent deltas for non-zero terms
+usual_delta = 0.66;             % 5 percent deltas for non-zero terms
 zero_term_delta = 0.00025;      % Even smaller delta for zero elements of x
 for j = 1:n
     y = xin;
