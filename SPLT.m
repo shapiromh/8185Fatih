@@ -11,16 +11,33 @@ if length(x)~=m || length(y)~=m
     return
 end
 
-% Find location on grid of c
-
 klo =1;
 khi =m;
-while (khi-klo)>1
-    k = floor((khi+klo)/2);
-    if x(k)>c 
-        khi=k;
-    else
-        klo=k;
+
+% Test for extrapolation
+
+if c>max(x)
+    display 'This is outside of your range for interpolation! Be careful.';
+    khi=m;
+    klo=m-1;
+end
+    
+if c<min(x)
+    display 'This is outside of your range for interpolation! Be careful.';
+    khi=2;
+    klo=1;
+end
+
+% Find location on grid of c
+
+if c<=max(x) && c>=min(x)
+    while (khi-klo)>1
+        k = floor((khi+klo)/2);
+        if x(k)>c
+            khi=k;
+        else
+            klo=k;
+        end
     end
 end
 
